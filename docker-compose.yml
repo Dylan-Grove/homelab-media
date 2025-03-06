@@ -1,0 +1,147 @@
+name: dy_lan
+
+services:
+  dy_lan-deluge:
+    container_name: dy_lan-deluge
+    image: lscr.io/linuxserver/deluge:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - nas_downloads:/downloads
+      - deluge_config:/config
+    ports:
+      - "8112:8112"
+    networks:
+      - dy_lan-network
+
+  dy_lan-radarr:
+    container_name: dy_lan-radarr
+    image: lscr.io/linuxserver/radarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - nas_movies:/movies
+      - nas_downloads:/downloads
+      - radarr_config:/config
+    ports:
+      - "7878:7878"
+    networks:
+      - dy_lan-network
+
+  dy_lan-sonarr:
+    container_name: dy_lan-sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - nas_tv:/tv
+      - nas_downloads:/downloads
+      - sonarr_config:/config
+    ports:
+      - "8989:8989"
+    networks:
+      - dy_lan-network
+
+  dy_lan-jackett:
+    container_name: dy_lan-jackett
+    image: lscr.io/linuxserver/jackett:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - jackett_config:/config
+    ports:
+      - "9117:9117"
+    networks:
+      - dy_lan-network
+
+  dy_lan-homarr:
+    container_name: dy_lan-homarr
+    image: ghcr.io/ajnart/homarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - homarr_config:/app/config
+    ports:
+      - "7575:7575"
+    networks:
+      - dy_lan-network
+
+  dy_lan-overseerr:
+    container_name: dy_lan-overseerr
+    image: lscr.io/linuxserver/overseerr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - overseerr_config:/config
+    ports:
+      - "5055:5055"
+    networks:
+      - dy_lan-network
+
+  dy_lan-tautulli:
+    container_name: dy_lan-tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - tautulli_config:/config
+    ports:
+      - "8181:8181"
+    networks:
+      - dy_lan-network
+
+  dy_lan-jellyfin:
+    container_name: dy_lan-jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - jellyfin_config:/config
+      - nas_movies:/movies:ro
+      - nas_tv:/tv:ro
+      - nas_downloads:/downloads:ro
+    ports:
+      - "8096:8096"
+    networks:
+      - dy_lan-network
+
+
+networks:
+  dy_lan-network:
+    driver: bridge
+
+volumes:
+  deluge_config:
+  radarr_config:
+  sonarr_config:
+  jackett_config:
+  homarr_config:
+  overseerr_config:
+  tautulli_config:
+  jellyfin_config:
+  nas_downloads:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username=docker,password=Gatediaux32!,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
+      device: "//dylnas/media/downloads"
+  nas_movies:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username=docker,password=Gatediaux32!,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
+      device: "//dylnas/media/movies"
+  nas_tv:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: username=docker,password=Gatediaux32!,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
+      device: "//dylnas/media/tv"
