@@ -113,6 +113,39 @@ services:
     networks:
       - dy_lan-network
 
+  dy_lan-plex:
+    container_name: dy_lan-plex
+    image: lscr.io/linuxserver/plex:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Edmonton
+      - VERSION=docker
+    volumes:
+      - plex_config:/config
+      - nas_movies:/movies:ro
+      - nas_tv:/tv:ro
+      - nas_downloads:/downloads:ro
+    ports:
+      - "32400:32400"
+    networks:
+      - dy_lan-network
+
+  dy_lan-portainer:
+    container_name: dy_lan-portainer
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9443:9443" # HTTPS interface
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=America/Edmonton
+    networks:
+      - dy_lan-network
+
 
 networks:
   dy_lan-network:
@@ -127,6 +160,8 @@ volumes:
   overseerr_config:
   tautulli_config:
   jellyfin_config:
+  plex_config:
+  portainer_data:
   nas_downloads:
     driver: local
     driver_opts:
