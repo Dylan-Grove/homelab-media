@@ -4,12 +4,13 @@ services:
   media-deluge:
     container_name: media-deluge
     image: lscr.io/linuxserver/deluge:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
       - /mnt/data/downloads:/downloads
-      - deluge_config:/config
+      - /mnt/data/docker/volumes/media_deluge_config:/config
     ports:
       - "8112:8112"
     networks:
@@ -18,13 +19,14 @@ services:
   media-radarr:
     container_name: media-radarr
     image: lscr.io/linuxserver/radarr:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
       - /mnt/data/movies:/movies
       - /mnt/data/downloads:/downloads
-      - radarr_config:/config
+      - /mnt/data/docker/volumes/media_radarr_config:/config
     ports:
       - "7878:7878"
     networks:
@@ -33,13 +35,14 @@ services:
   media-sonarr:
     container_name: media-sonarr
     image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
       - /mnt/data/tv:/tv
       - /mnt/data/downloads:/downloads
-      - sonarr_config:/config
+      - /mnt/data/docker/volumes/media_sonarr_config:/config
     ports:
       - "8989:8989"
     networks:
@@ -48,11 +51,12 @@ services:
   media-jackett:
     container_name: media-jackett
     image: lscr.io/linuxserver/jackett:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - jackett_config:/config
+      - /mnt/data/docker/volumes/media_jackett_config:/config
     ports:
       - "9117:9117"
     networks:
@@ -61,11 +65,12 @@ services:
   media-homarr:
     container_name: media-homarr
     image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - homarr_config:/app/config
+      - /mnt/data/docker/volumes/media_homarr_config:/app/config
     ports:
       - "7575:7575"
     networks:
@@ -74,11 +79,12 @@ services:
   media-overseerr:
     container_name: media-overseerr
     image: lscr.io/linuxserver/overseerr:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - overseerr_config:/config
+      - /mnt/data/docker/volumes/media_overseerr_config:/config
     ports:
       - "5055:5055"
     networks:
@@ -87,11 +93,12 @@ services:
   media-tautulli:
     container_name: media-tautulli
     image: lscr.io/linuxserver/tautulli:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - tautulli_config:/config
+      - /mnt/data/docker/volumes/media_tautulli_config:/config
     ports:
       - "8181:8181"
     networks:
@@ -100,11 +107,12 @@ services:
   media-jellyfin:
     container_name: media-jellyfin
     image: lscr.io/linuxserver/jellyfin:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - jellyfin_config:/config
+      - /mnt/data/docker/volumes/media_jellyfin_config:/config
       - /mnt/data/movies:/movies:ro
       - /mnt/data/tv:/tv:ro
       - /mnt/data/downloads:/downloads:ro
@@ -116,13 +124,14 @@ services:
   media-plex:
     container_name: media-plex
     image: lscr.io/linuxserver/plex:latest
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Edmonton
       - VERSION=docker
     volumes:
-      - plex_config:/config
+      - /mnt/data/docker/volumes/media_plex_config:/config
       - /mnt/data/movies:/movies:ro
       - /mnt/data/tv:/tv:ro
       - /mnt/data/downloads:/downloads:ro
@@ -135,14 +144,14 @@ services:
     container_name: media-portainer
     image: portainer/portainer-ce:latest
     restart: unless-stopped
-    ports:
-      - "9000:9000"
-      - "9443:9443" # HTTPS interface
-    volumes:
-      - portainer_data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - TZ=America/Edmonton
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - /mnt/data/docker/volumes/media_portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - media-network
 
@@ -151,13 +160,13 @@ networks:
     driver: bridge
 
 volumes:
-  deluge_config:
-  radarr_config:
-  sonarr_config:
-  jackett_config:
-  homarr_config:
-  overseerr_config:
-  tautulli_config:
-  jellyfin_config:
-  plex_config:
-  portainer_data:
+  media_deluge_config:
+  media_radarr_config:
+  media_sonarr_config:
+  media_jackett_config:
+  media_homarr_config:
+  media_overseerr_config:
+  media_tautulli_config:
+  media_jellyfin_config:
+  media_plex_config:
+  media_portainer_data:
