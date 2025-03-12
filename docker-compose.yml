@@ -1,52 +1,52 @@
-name: dy_lan
+name: media
 
 services:
-  dy_lan-deluge:
-    container_name: dy_lan-deluge
+  media-deluge:
+    container_name: media-deluge
     image: lscr.io/linuxserver/deluge:latest
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - nas_downloads:/downloads
+      - /mnt/data/downloads:/downloads
       - deluge_config:/config
     ports:
       - "8112:8112"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-radarr:
-    container_name: dy_lan-radarr
+  media-radarr:
+    container_name: media-radarr
     image: lscr.io/linuxserver/radarr:latest
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - nas_movies:/movies
-      - nas_downloads:/downloads
+      - /mnt/data/movies:/movies
+      - /mnt/data/downloads:/downloads
       - radarr_config:/config
     ports:
       - "7878:7878"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-sonarr:
-    container_name: dy_lan-sonarr
+  media-sonarr:
+    container_name: media-sonarr
     image: lscr.io/linuxserver/sonarr:latest
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - nas_tv:/tv
-      - nas_downloads:/downloads
+      - /mnt/data/tv:/tv
+      - /mnt/data/downloads:/downloads
       - sonarr_config:/config
     ports:
       - "8989:8989"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-jackett:
-    container_name: dy_lan-jackett
+  media-jackett:
+    container_name: media-jackett
     image: lscr.io/linuxserver/jackett:latest
     environment:
       - PUID=1000
@@ -56,10 +56,10 @@ services:
     ports:
       - "9117:9117"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-homarr:
-    container_name: dy_lan-homarr
+  media-homarr:
+    container_name: media-homarr
     image: ghcr.io/ajnart/homarr:latest
     environment:
       - PUID=1000
@@ -69,10 +69,10 @@ services:
     ports:
       - "7575:7575"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-overseerr:
-    container_name: dy_lan-overseerr
+  media-overseerr:
+    container_name: media-overseerr
     image: lscr.io/linuxserver/overseerr:latest
     environment:
       - PUID=1000
@@ -82,10 +82,10 @@ services:
     ports:
       - "5055:5055"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-tautulli:
-    container_name: dy_lan-tautulli
+  media-tautulli:
+    container_name: media-tautulli
     image: lscr.io/linuxserver/tautulli:latest
     environment:
       - PUID=1000
@@ -95,26 +95,26 @@ services:
     ports:
       - "8181:8181"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-jellyfin:
-    container_name: dy_lan-jellyfin
+  media-jellyfin:
+    container_name: media-jellyfin
     image: lscr.io/linuxserver/jellyfin:latest
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
       - jellyfin_config:/config
-      - nas_movies:/movies:ro
-      - nas_tv:/tv:ro
-      - nas_downloads:/downloads:ro
+      - /mnt/data/movies:/movies:ro
+      - /mnt/data/tv:/tv:ro
+      - /mnt/data/downloads:/downloads:ro
     ports:
       - "8096:8096"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-plex:
-    container_name: dy_lan-plex
+  media-plex:
+    container_name: media-plex
     image: lscr.io/linuxserver/plex:latest
     environment:
       - PUID=1000
@@ -123,16 +123,16 @@ services:
       - VERSION=docker
     volumes:
       - plex_config:/config
-      - nas_movies:/movies:ro
-      - nas_tv:/tv:ro
-      - nas_downloads:/downloads:ro
+      - /mnt/data/movies:/movies:ro
+      - /mnt/data/tv:/tv:ro
+      - /mnt/data/downloads:/downloads:ro
     ports:
       - "32400:32400"
     networks:
-      - dy_lan-network
+      - media-network
 
-  dy_lan-portainer:
-    container_name: dy_lan-portainer
+  media-portainer:
+    container_name: media-portainer
     image: portainer/portainer-ce:latest
     restart: unless-stopped
     ports:
@@ -144,11 +144,10 @@ services:
     environment:
       - TZ=America/Edmonton
     networks:
-      - dy_lan-network
-
+      - media-network
 
 networks:
-  dy_lan-network:
+  media-network:
     driver: bridge
 
 volumes:
@@ -162,21 +161,3 @@ volumes:
   jellyfin_config:
   plex_config:
   portainer_data:
-  nas_downloads:
-    driver: local
-    driver_opts:
-      type: cifs
-      o: username=docker,password=Gatediaux32!,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
-      device: "//dylnas/media/downloads"
-  nas_movies:
-    driver: local
-    driver_opts:
-      type: cifs
-      o: username=docker,password=Gatediaux32!,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
-      device: "//dylnas/media/movies"
-  nas_tv:
-    driver: local
-    driver_opts:
-      type: cifs
-      o: username=docker,password=Gatediaux32!,uid=1000,gid=1000,file_mode=0777,dir_mode=0777
-      device: "//dylnas/media/tv"
