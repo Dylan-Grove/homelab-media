@@ -16,6 +16,24 @@ services:
     networks:
       - media-network
 
+  media-qbittorrent:
+    container_name: media-qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - WEBUI_PORT=8080
+    volumes:
+      - /mnt/data/downloads:/downloads
+      - /mnt/data/docker/volumes/media_qbittorrent_config:/config
+    ports:
+      - "8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    networks:
+      - media-network
+
   media-radarr:
     container_name: media-radarr
     image: lscr.io/linuxserver/radarr:latest
@@ -161,6 +179,7 @@ networks:
 
 volumes:
   media_deluge_config:
+  media_qbittorrent_config:
   media_radarr_config:
   media_sonarr_config:
   media_jackett_config:
