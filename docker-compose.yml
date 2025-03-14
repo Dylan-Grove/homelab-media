@@ -13,6 +13,7 @@ services:
       - /mnt/data/docker/volumes/media_deluge_config:/config
     ports:
       - "8112:8112"
+      - "58846:58846"
     networks:
       - media-network
 
