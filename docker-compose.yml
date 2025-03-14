@@ -1,21 +1,6 @@
 name: media
 
 services:
-  media-deluge:
-    container_name: media-deluge
-    image: lscr.io/linuxserver/deluge:latest
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /mnt/data/downloads:/downloads
-      - /mnt/data/docker/volumes/media_deluge_config:/config
-    ports:
-      - "8112:8112"
-      - "58846:58846"
-    networks:
-      - media-network
 
   media-qbittorrent:
     container_name: media-qbittorrent
@@ -179,7 +164,6 @@ networks:
     driver: bridge
 
 volumes:
-  media_deluge_config:
   media_qbittorrent_config:
   media_radarr_config:
   media_sonarr_config:
