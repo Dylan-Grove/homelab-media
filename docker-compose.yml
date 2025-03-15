@@ -135,9 +135,8 @@ services:
       - VERSION=docker
     volumes:
       - /mnt/data/docker/volumes/media_plex_config:/config
-      - /mnt/data/movies:/movies:ro
-      - /mnt/data/tv:/tv:ro
-      - /mnt/data/downloads:/downloads:ro
+      - /mnt/data/movies:/movies
+      - /mnt/data/tv:/tv
     ports:
       - "32400:32400"
     networks:
