@@ -197,7 +197,7 @@ services:
     environment:
       - TZ=America/Edmonton
       - PUID=1000
-      - PGID=1000
+      - PGID=44
     volumes:
       - /mnt/data/movies:/movies
       - /mnt/data/tv:/tv
