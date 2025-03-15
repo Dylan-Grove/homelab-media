@@ -1,7 +1,6 @@
 name: media
 
 services:
-
   media-qbittorrent:
     container_name: media-qbittorrent
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -66,19 +65,19 @@ services:
     networks:
       - media-network
 
-  media-homarr:
-    container_name: media-homarr
-    image: ghcr.io/ajnart/homarr:latest
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /mnt/data/docker/volumes/media_homarr_config:/app/config
-    ports:
-      - "7575:7575"
-    networks:
-      - media-network
+  # media-homarr:
+  #   container_name: media-homarr
+  #   image: ghcr.io/ajnart/homarr:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #   volumes:
+  #     - /mnt/data/docker/volumes/media_homarr_config:/app/config
+  #   ports:
+  #     - "7575:7575"
+  #   networks:
+  #     - media-network
 
   media-overseerr:
     container_name: media-overseerr
@@ -94,36 +93,36 @@ services:
     networks:
       - media-network
 
-  media-tautulli:
-    container_name: media-tautulli
-    image: lscr.io/linuxserver/tautulli:latest
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /mnt/data/docker/volumes/media_tautulli_config:/config
-    ports:
-      - "8181:8181"
-    networks:
-      - media-network
+  # media-tautulli:
+  #   container_name: media-tautulli
+  #   image: lscr.io/linuxserver/tautulli:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #   volumes:
+  #     - /mnt/data/docker/volumes/media_tautulli_config:/config
+  #   ports:
+  #     - "8181:8181"
+  #   networks:
+  #     - media-network
 
-  media-jellyfin:
-    container_name: media-jellyfin
-    image: lscr.io/linuxserver/jellyfin:latest
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /mnt/data/docker/volumes/media_jellyfin_config:/config
-      - /mnt/data/movies:/movies:ro
-      - /mnt/data/tv:/tv:ro
-      - /mnt/data/downloads:/downloads:ro
-    ports:
-      - "8096:8096"
-    networks:
-      - media-network
+  # media-jellyfin:
+  #   container_name: media-jellyfin
+  #   image: lscr.io/linuxserver/jellyfin:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #   volumes:
+  #     - /mnt/data/docker/volumes/media_jellyfin_config:/config
+  #     - /mnt/data/movies:/movies:ro
+  #     - /mnt/data/tv:/tv:ro
+  #     - /mnt/data/downloads:/downloads:ro
+  #   ports:
+  #     - "8096:8096"
+  #   networks:
+  #     - media-network
 
   media-plex:
     container_name: media-plex
@@ -159,6 +158,35 @@ services:
     networks:
       - media-network
 
+  media-bazarr:
+    container_name: media-bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_bazarr_config:/config
+      - /mnt/data/movies:/movies
+      - /mnt/data/tv:/tv
+    ports:
+      - "6767:6767"
+    networks:
+      - media-network
+
+  media-nginx:
+    container_name: media-nginx
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/data/docker/volumes/media_nginx_config:/etc/nginx
+      - /mnt/data/docker/volumes/media_nginx_ssl:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - media-network
+
 networks:
   media-network:
     driver: bridge
@@ -174,3 +202,6 @@ volumes:
   media_jellyfin_config:
   media_plex_config:
   media_portainer_data:
+  media_bazarr_config:
+  media_nginx_config:
+  media_nginx_ssl:
