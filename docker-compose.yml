@@ -141,6 +141,8 @@ services:
       - "32400:32400"
     networks:
       - media-network
+    devices:
+      - /dev/dri:/dev/dri
 
   media-portainer:
     container_name: media-portainer
@@ -186,6 +188,26 @@ services:
     networks:
       - media-network
 
+  media-tdarr:
+    container_name: media-tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    ports:
+      - "8265:8265"
+      - "8266:8266"
+    environment:
+      - TZ=America/Edmonton
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/movies:/movies
+      - /mnt/data/tv:/tv
+      - /mnt/data/docker/volumes/media_tdarr_config:/config
+    devices:
+      - /dev/dri:/dev/dri
+    networks:
+      - media-network
+
+
 networks:
   media-network:
     driver: bridge
@@ -202,5 +224,6 @@ volumes:
   media_plex_config:
   media_portainer_data:
   media_bazarr_config:
+  media_tdarr_config:
   media_nginx_config:
   media_nginx_ssl:
