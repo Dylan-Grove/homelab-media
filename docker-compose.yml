@@ -133,6 +133,9 @@ services:
       - PGID=44
       - TZ=America/Edmonton
       - VERSION=docker
+      - NVIDIA_VISIBLE_DEVICES=none
+      - NVIDIA_DRIVER_CAPABILITIES=none
+
     volumes:
       - /mnt/data/docker/volumes/media_plex_config:/config
       - /mnt/data/movies:/movies
