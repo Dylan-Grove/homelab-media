@@ -197,7 +197,7 @@ services:
     ports:
       - "8265:8265"
     environment:
-      - serverIP=0.0.0.0
+      - serverIP=192.168.1.160
       - serverPort=8265
       - TZ=America/Edmonton
       - PUID=1000
