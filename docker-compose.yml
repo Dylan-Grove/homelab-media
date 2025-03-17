@@ -205,6 +205,8 @@ services:
       - PUID=1000
       - PGID=44
     volumes:
+      - /mnt/data/movies:/movies
+      - /mnt/data/tv:/tv
       - /mnt/data/docker/volumes/media_tdarr_server_config:/config
     networks:
       - media-network
