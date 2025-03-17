@@ -191,30 +191,47 @@ services:
     networks:
       - media-network
 
-  media-tdarr:
-    container_name: media-tdarr
+  media-tdarr-server:
+    container_name: media-tdarr-server
     image: ghcr.io/haveagitgat/tdarr:latest
     ports:
       - "8265:8265"
-      - "8266:8266"
     environment:
-      - serverIP=192.168.1.160
+      - serverIP=0.0.0.0
       - serverPort=8265
-      - nodeIP=192.168.1.160
-      - nodePort=8266
-      - nodeName=tdarr-node
-      - nodeID=tdarr-node-1
       - TZ=America/Edmonton
       - PUID=1000
       - PGID=44
     volumes:
-      - /mnt/data/movies:/movies
-      - /mnt/data/tv:/tv
-      - /mnt/data/docker/volumes/media_tdarr_config:/config
-    devices:
-      - /dev/dri:/dev/dri
+      - /mnt/data/docker/volumes/media_tdarr_server_config:/config
     networks:
       - media-network
+    restart: unless-stopped
+
+media-tdarr-node:
+  container_name: media-tdarr-node
+  image: ghcr.io/haveagitgat/tdarr_node:latest
+  ports:
+    - "8266:8266"
+  environment:
+    - nodeID=tdarr-node-1
+    - nodeName=tdarr-node
+    - serverIP=192.168.1.160
+    - serverPort=8265
+    - nodeIP=0.0.0.0
+    - nodePort=8266
+    - TZ=America/Edmonton
+    - PUID=1000
+    - PGID=44
+  volumes:
+    - /mnt/data/movies:/movies
+    - /mnt/data/tv:/tv
+    - /mnt/data/docker/volumes/media_tdarr_node_config:/config
+  devices:
+    - /dev/dri:/dev/dri
+  networks:
+    - media-network
+  restart: unless-stopped
 
 
 networks:
@@ -233,6 +250,7 @@ volumes:
   media_plex_config:
   media_portainer_data:
   media_bazarr_config:
-  media_tdarr_config:
+  media_tdarr_server_config:
+  media_tdarr_node_config:
   media_nginx_config:
   media_nginx_ssl:
