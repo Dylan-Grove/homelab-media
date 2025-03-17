@@ -196,9 +196,11 @@ services:
     image: ghcr.io/haveagitgat/tdarr:latest
     ports:
       - "8265:8265"
+      - "8264:8264"
     environment:
       - serverIP=192.168.1.160
       - serverPort=8265
+      - webUIPort=8264
       - TZ=America/Edmonton
       - PUID=1000
       - PGID=44
