@@ -198,9 +198,9 @@ services:
       - "8265:8265"
       - "8266:8266"
     environment:
-      - serverIP=0.0.0.0
+      - serverIP=192.168.1.160
       - serverPort=8265
-      - nodeIP=0.0.0.0
+      - nodeIP=192.168.1.160
       - nodePort=8266
       - nodeName=tdarr-node
       - nodeID=tdarr-node-1
