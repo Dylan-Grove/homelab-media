@@ -198,6 +198,12 @@ services:
       - "8265:8265"
       - "8266:8266"
     environment:
+      - serverIP=0.0.0.0
+      - serverPort=8265
+      - nodeIP=0.0.0.0
+      - nodePort=8266
+      - nodeName=tdarr-node
+      - nodeID=tdarr-node-1
       - TZ=America/Edmonton
       - PUID=1000
       - PGID=44
