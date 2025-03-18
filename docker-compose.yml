@@ -208,7 +208,7 @@ services:
     volumes:
       - /mnt/data/movies:/movies
       - /mnt/data/tv:/tv
-      - /mnt/data/docker/volumes/media_tdarr_server_config:/config
+      - /mnt/data/docker/volumes/media_tdarr_server_config:/app/configs
     networks:
       - media-network
     restart: unless-stopped
