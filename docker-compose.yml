@@ -201,6 +201,7 @@ services:
       - serverIP=192.168.1.160
       - serverPort=8265
       - webUIPort=8264
+      - nodeCPU=true
       - TZ=America/Edmonton
       - PUID=1000
       - PGID=44
@@ -224,6 +225,7 @@ services:
       - serverPort=8265
       - nodeIP=0.0.0.0
       - nodePort=8266
+      - nodeCPU=true
       - TZ=America/Edmonton
       - PUID=1000
       - PGID=44
