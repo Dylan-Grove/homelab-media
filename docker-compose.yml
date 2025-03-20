@@ -193,7 +193,7 @@ services:
       - media-plex
       - media-overseerr
     networks:
-      - media_network
+      - media-network
 
 
   media-tdarr-server:
