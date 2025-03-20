@@ -182,14 +182,19 @@ services:
     container_name: media-nginx
     image: nginx:latest
     restart: unless-stopped
-    volumes:
-      - /mnt/data/docker/volumes/media_nginx_config:/etc/nginx
-      - /mnt/data/docker/volumes/media_nginx_ssl:/etc/nginx/ssl
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - /mnt/data/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /mnt/data/docker/nginx/ssl:/etc/ssl:ro
+      - /var/log/nginx:/var/log/nginx
+    depends_on:
+      - media-plex
+      - media-overseerr
     networks:
-      - media-network
+      - media_network
+
 
   media-tdarr-server:
     container_name: media-tdarr-server
