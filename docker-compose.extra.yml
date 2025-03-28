@@ -1,0 +1,141 @@
+name: media-extra
+
+services:
+  media-jackett:  
+    container_name: media-jackett  
+    image: lscr.io/linuxserver/jackett:latest  
+    restart: unless-stopped  
+    environment:  
+      - PUID=1000  
+      - PGID=1000  
+      - TZ=America/Denver  
+    volumes:  
+      - /mnt/data/docker/volumes/media_jackett_config:/config  
+    ports:  
+      - "9117:9117"  
+    networks:
+      - media-network
+
+  media-homarr:
+    container_name: media-homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_homarr_config:/app/config
+    ports:
+      - "7575:7575"
+    networks:
+      - media-network
+
+  media-tautulli:
+    container_name: media-tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_tautulli_config:/config
+    ports:
+      - "8181:8181"
+    networks:
+      - media-network
+
+  media-jellyfin:
+    container_name: media-jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_jellyfin_config:/config
+      - /mnt/data/movies:/movies:ro
+      - /mnt/data/tv:/tv:ro
+      - /mnt/data/downloads:/downloads:ro
+    ports:
+      - "8096:8096"
+    networks:
+      - media-network
+
+  media-nginx:
+    container_name: media-nginx
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /mnt/data/docker/nginx/ssl:/etc/ssl:ro
+      - /var/log/nginx:/var/log/nginx
+    depends_on:
+      - media-plex
+      - media-overseerr
+    networks:
+      - media-network
+
+  media-tdarr-server:
+    container_name: media-tdarr-server
+    image: ghcr.io/haveagitgat/tdarr:latest
+    ports:
+      - "8265:8265"
+      - "8264:8264"
+    environment:
+      - serverIP=192.168.1.160
+      - serverPort=8265
+      - webUIPort=8264
+      - nodeCPU=true
+      - TZ=America/Edmonton
+      - PUID=1000
+      - PGID=44
+    volumes:
+      - /mnt/data/movies:/movies
+      - /mnt/data/tv:/tv
+      - /mnt/data/docker/volumes/media_tdarr_server_config:/app/configs
+    networks:
+      - media-network
+    restart: unless-stopped
+
+  media-tdarr-node:
+    container_name: media-tdarr-node
+    image: ghcr.io/haveagitgat/tdarr_node:latest
+    ports:
+      - "8266:8266"
+    environment:
+      - nodeID=tdarr-node-1
+      - nodeName=tdarr-node
+      - serverIP=192.168.1.160
+      - serverPort=8265
+      - nodeIP=0.0.0.0
+      - nodePort=8266
+      - nodeCPU=true
+      - TZ=America/Edmonton
+      - PUID=1000
+      - PGID=44
+    volumes:
+      - /mnt/data/movies:/movies
+      - /mnt/data/tv:/tv
+      - /mnt/data/docker/volumes/media_tdarr_node_config:/config
+    devices:
+      - /dev/dri:/dev/dri
+    networks:
+      - media-network
+    restart: unless-stopped
+
+networks:
+  media-network:
+    driver: bridge
+
+volumes:
+  media_jackett_config:
+  media_homarr_config:
+  media_tautulli_config:
+  media_jellyfin_config:
+  media_nginx_config:
+  media_nginx_ssl:
+  media_tdarr_server_config:
+  media_tdarr_node_config: 
