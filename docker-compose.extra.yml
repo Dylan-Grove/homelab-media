@@ -44,23 +44,6 @@ services:
     networks:
       - media-network
 
-  media-jellyfin:
-    container_name: media-jellyfin
-    image: lscr.io/linuxserver/jellyfin:latest
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /mnt/data/docker/volumes/media_jellyfin_config:/config
-      - /mnt/data/movies:/movies:ro
-      - /mnt/data/tv:/tv:ro
-      - /mnt/data/downloads:/downloads:ro
-    ports:
-      - "8096:8096"
-    networks:
-      - media-network
-
   media-nginx:
     container_name: media-nginx
     image: nginx:latest
@@ -134,7 +117,6 @@ volumes:
   media_jackett_config:
   media_homarr_config:
   media_tautulli_config:
-  media_jellyfin_config:
   media_nginx_config:
   media_nginx_ssl:
   media_tdarr_server_config:

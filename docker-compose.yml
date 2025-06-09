@@ -138,6 +138,23 @@ services:
       - "6767:6767"
     networks:
       - media-network
+  
+  media-jellyfin:
+    container_name: media-jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_jellyfin_config:/config
+      - /mnt/data/movies:/movies:ro
+      - /mnt/data/tv:/tv:ro
+      - /mnt/data/downloads:/downloads:ro
+    ports:
+      - "8096:8096"
+    networks:
+      - media-network
 
 networks:
   media-network:
@@ -152,3 +169,4 @@ volumes:
   media_plex_config:
   media_portainer_data:
   media_bazarr_config:
+  media_jellyfin_config:
