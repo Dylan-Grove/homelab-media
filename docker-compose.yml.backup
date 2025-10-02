@@ -87,10 +87,11 @@ services:
     environment:
       - PUID=1000
       - PGID=44
-      - TZ=America/Denver
+      - TZ=America/Edmonton
       - VERSION=docker
       - NVIDIA_VISIBLE_DEVICES=none
       - NVIDIA_DRIVER_CAPABILITIES=none
+
     volumes:
       - /mnt/data/docker/volumes/media_plex_config:/config
       - /mnt/data/movies:/movies
@@ -112,7 +113,7 @@ services:
     image: portainer/portainer-ce:latest
     restart: unless-stopped
     environment:
-      - TZ=America/Denver
+      - TZ=America/Edmonton
     ports:
       - "9000:9000"
       - "9443:9443"
