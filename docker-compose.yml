@@ -91,6 +91,7 @@ services:
       - VERSION=docker
       - NVIDIA_VISIBLE_DEVICES=none
       - NVIDIA_DRIVER_CAPABILITIES=none
+      - PLEX_CLAIM=claim-SyHXryd7BMJkjUMt3zpF
     volumes:
       - /mnt/data/docker/volumes/media_plex_config:/config
       - /mnt/data/movies:/movies
