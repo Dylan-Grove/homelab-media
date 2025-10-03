@@ -155,6 +155,34 @@ services:
     networks:
       - media-network
 
+  media-homarr:
+    container_name: media-homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_homarr_config:/app/config
+    ports:
+      - "7575:7575"
+    networks:
+      - media-network
+
+  media-tautulli:
+    container_name: media-tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /mnt/data/docker/volumes/media_tautulli_config:/config
+    ports:
+      - "8181:8181"
+    networks:
+      - media-network
+
 networks:
   media-network:
     driver: bridge
@@ -169,3 +197,5 @@ volumes:
   media_portainer_data:
   media_bazarr_config:
   media_jellyfin_config:
+  media_tautulli_config:
+  media_homarr_config:
